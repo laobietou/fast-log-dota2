@@ -1,11 +1,13 @@
 {
 	"name": "fast-log-dota2",
-	"displayName": "fast-log-dota2",
-	"description": "output print() in ts and $.MSG in tsx",
-	"version": "0.0.1",
+	"displayName": "Fast Log Dota2",
+	"description": "auto-generate print() in .ts and $.MSG() in .tsx",
+	"version": "1.0.0",
+	"publisher": "laobietou",
 	"engines": {
 		"vscode": "^1.82.0"
 	},
+	"icon": "images/icon.png",
 	"categories": [
 		"Other"
 	],
@@ -47,5 +49,10 @@
 		"mocha": "^10.2.0",
 		"typescript": "^5.1.6",
 		"@vscode/test-electron": "^2.3.4"
+	},
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/laobietou/fast-log-dota2"
 	}
 }

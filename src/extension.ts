@@ -18,6 +18,10 @@ export function activate(context: vscode.ExtensionContext) {
 			// 获取选中行的位置
 			const position = selection.active
 
+			const trimmedLine = editor.document.lineAt(position.line).text.substring(0, position.character)
+			const tab = (trimmedLine.match(/^\t*/)?.[0] || "")
+			console.log("++" + tab + "++")
+
 			// 判断文件类型
 			let logMethod: string = ""
 			const fileType = editor.document.fileName.split(".").pop()
@@ -32,19 +36,19 @@ export function activate(context: vscode.ExtensionContext) {
 				editor.edit(editBuilder => {
 					editBuilder.insert(
 						new vscode.Position(position.line + 1, 0),
-						`\t${logMethod}('~${functionName}()  ~${text}:' + ${text})\n`
+						`${tab}${logMethod}('~${functionName}()  ~${text}:' + ${text})\n`
 					)
 				})
 			} else if (className.length > 0) {
 				editor.edit(editBuilder => {
 					editBuilder.insert(
 						new vscode.Position(position.line + 1, 0),
-						`\t${logMethod}('~class:${className}  ~${text}:' + ${text})\n`
+						`${tab}${logMethod}('~class:${className}  ~${text}:' + ${text})\n`
 					)
 				})
 			} else {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `\t${logMethod}('~${text}:' + ${text})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~${text}:' + ${text})\n`)
 				})
 			}
 		}
@@ -54,6 +58,10 @@ export function activate(context: vscode.ExtensionContext) {
 // This method is called when your extension is deactivated
 export function deactivate() {}
 
+/**
+ * 下面的代码来自于Chakroun-Anas
+ * https://github.com/Chakroun-Anas/turbo-console-log
+ */
 type FileType = "ts" | "tsx"
 type BlockType = "class" | "function"
 enum BracketType {
@@ -144,7 +152,6 @@ function getClassName(loc: string): string {
 	}
 }
 function getFunctionName(loc: string): string {
-	console.log("doesContainsNamedFunctionDeclaration" + doesContainsNamedFunctionDeclaration(loc))
 	if (doesContainsNamedFunctionDeclaration(loc)) {
 		if (/(const|let|var)(\s*)[a-zA-Z0-9]*\s*=/.test(loc)) {
 			return loc.split("=")[0].replace(/export |module.exports |const |var |let |=|(\s*)/g, "")

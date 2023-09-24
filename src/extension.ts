@@ -6,7 +6,7 @@ import {TextDocument} from "vscode"
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-	vscode.commands.registerCommand("generator log", () => {
+	vscode.commands.registerCommand("fast-log-dota2.generator-log", () => {
 		// 获取当前活动编辑器
 		const editor = vscode.window.activeTextEditor
 
@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
 			let logMethod: string = ""
 			const fileType = editor.document.fileName.split(".").pop()
 			if (fileType == "ts") logMethod = "print"
-			else logMethod = "$.MSG"
+			else logMethod = "$.Msg"
 
 			// 判断在class内还是function内
 			const className = enclosingBlockName(editor.document, position.line, "class")
@@ -32,15 +32,19 @@ export function activate(context: vscode.ExtensionContext) {
 				editor.edit(editBuilder => {
 					editBuilder.insert(
 						new vscode.Position(position.line + 1, 0),
-						`\n${logMethod}('~function:${functionName}()  ~${text}:' + ${text})\n`
+						`\t${logMethod}('~${functionName}()  ~${text}:' + ${text})\n`
+					)
+				})
+			} else if (className.length > 0) {
+				editor.edit(editBuilder => {
+					editBuilder.insert(
+						new vscode.Position(position.line + 1, 0),
+						`\t${logMethod}('~class:${className}  ~${text}:' + ${text})\n`
 					)
 				})
 			} else {
 				editor.edit(editBuilder => {
-					editBuilder.insert(
-						new vscode.Position(position.line + 1, 0),
-						`${logMethod}('~class:${className}  ~${text}:' + ${text})\n`
-					)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `\t${logMethod}('~${text}:' + ${text})\n`)
 				})
 			}
 		}

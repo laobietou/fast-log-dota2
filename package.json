@@ -4,7 +4,7 @@
 	"description": "output print() in ts and $.MSG in tsx",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.80.0"
+		"vscode": "^1.82.0"
 	},
 	"categories": [
 		"Other"
@@ -14,7 +14,7 @@
 	"contributes": {
 		"commands": [
 			{
-				"command": "generator log",
+				"command": "fast-log-dota2.generator-log",
 				"title": "Generator Log"
 			}
 		],
@@ -23,7 +23,8 @@
 				"command": "fast-log-dota2.generator-log",
 				"key": "ctrl+shift+l",
 				"mac": "cmd+shift+l",
-				"when": "editorTextFocus"
+				"when": "editorTextFocus",
+				"group": "navigation"
 			}
 		]
 	},

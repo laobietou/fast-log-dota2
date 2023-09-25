@@ -2,7 +2,7 @@
 	"name": "fast-log-dota2",
 	"displayName": "Fast Log Dota2",
 	"description": "auto-generate print() in .ts and $.MSG() in .tsx",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"publisher": "laobietou",
 	"engines": {
 		"vscode": "^1.82.0"
@@ -11,7 +11,10 @@
 	"categories": [
 		"Other"
 	],
-	"activationEvents": [],
+	"activationEvents": [
+		"onLanguage:typescript",
+		"onLanguage:typescriptreact"
+	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
@@ -25,10 +28,18 @@
 				"command": "fast-log-dota2.generator-log",
 				"key": "ctrl+shift+l",
 				"mac": "cmd+shift+l",
-				"when": "editorTextFocus",
-				"group": "navigation"
+				"when": "editorTextFocus && resourceLangId == typescript || resourceLangId == typescriptreact"
 			}
-		]
+		],
+		"menus": {
+			"editor/context": [
+				{
+					"command": "fast-log-dota2.generator-log",
+					"when": "editorTextFocus && resourceLangId == typescript || resourceLangId == typescriptreact",
+					"group": "1_modification"
+				}
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "yarn run compile",

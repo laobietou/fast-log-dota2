@@ -14,9 +14,9 @@ Dota2 制图用的.在 ts 文件中用 print()生成 log,在 tsx 文件中用$.M
 ```typescript
 // ts file
 OnSpellStart(): void {
-		const caster = this.GetCaster()
-        // Auto-generate log
-		print('~OnSpellStart()  ~caster:' + caster)
+	const caster = this.GetCaster()
+    // Auto-generate log
+	print('~OnSpellStart()  ~caster:' + caster)
 }
 
 // tsx file

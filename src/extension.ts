@@ -18,9 +18,9 @@ export function activate(context: vscode.ExtensionContext) {
 			// 获取选中行的位置
 			const position = selection.active
 
+			// 获取当前行前面制表符
 			const trimmedLine = editor.document.lineAt(position.line).text.substring(0, position.character)
-			const tab = (trimmedLine.match(/^\t*/)?.[0] || "")
-			console.log("++" + tab + "++")
+			const tab = trimmedLine.match(/^\t*/)?.[0] || ""
 
 			// 判断文件类型
 			let logMethod: string = ""
@@ -62,7 +62,6 @@ export function deactivate() {}
  * 下面的代码来自于Chakroun-Anas
  * https://github.com/Chakroun-Anas/turbo-console-log
  */
-type FileType = "ts" | "tsx"
 type BlockType = "class" | "function"
 enum BracketType {
 	PARENTHESIS = "PARENTHESIS",

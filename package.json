@@ -1,7 +1,7 @@
 {
 	"name": "fast-log-dota2",
 	"displayName": "Fast Log Dota2",
-	"description": "auto-generate print() in .ts and $.MSG() in .tsx",
+	"description": "auto-generate print() in .ts and $.Msg() in .tsx",
 	"version": "1.0.1",
 	"publisher": "laobietou",
 	"engines": {

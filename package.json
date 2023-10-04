@@ -2,7 +2,7 @@
 	"name": "fast-log-dota2",
 	"displayName": "Fast Log Dota2",
 	"description": "auto-generate print() in .ts and $.Msg() in .tsx",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"publisher": "laobietou",
 	"engines": {
 		"vscode": "^1.82.0"
@@ -21,6 +21,14 @@
 			{
 				"command": "fast-log-dota2.generator-log",
 				"title": "Generator Log"
+			},
+			{
+				"command": "fast-log-dota2.generator-annotation",
+				"title": "Annotation Logs"
+			},
+			{
+				"command": "fast-log-dota2.generator-unannotation",
+				"title": "Unannotation Logs"
 			}
 		],
 		"keybindings": [

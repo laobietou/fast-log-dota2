@@ -1,9 +1,12 @@
 # Change Log
 
-All notable changes to the "fast-log-dota2" extension will be documented in this file.
+## [1.0.2] - 2023-10-4
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Added
 
-## [Unreleased]
+注释全部 log  
+取消注释全部 log
 
-- Initial release
+### Changed
+
+无选中内容时 log 内容优化

@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
-import {TextDocument} from "vscode"
+import { TextDocument } from "vscode"
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -34,23 +34,75 @@ export function activate(context: vscode.ExtensionContext) {
 
 			if (functionName.length > 0) {
 				editor.edit(editBuilder => {
-					editBuilder.insert(
-						new vscode.Position(position.line + 1, 0),
-						`${tab}${logMethod}('~${functionName}()  ~${text}:' + ${text})\n`
-					)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~${functionName}()  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
 				})
 			} else if (className.length > 0) {
 				editor.edit(editBuilder => {
-					editBuilder.insert(
-						new vscode.Position(position.line + 1, 0),
-						`${tab}${logMethod}('~class:${className}  ~${text}:' + ${text})\n`
-					)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~class:${className}  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
 				})
 			} else {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~${text}:' + ${text})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~${text}:' + ${text != "" ? text : `"什么"`})\n`)
 				})
 			}
+		}
+	})
+	vscode.commands.registerCommand("fast-log-dota2.generator-annotation", () => {
+		const editor = vscode.window.activeTextEditor
+		if (editor) {
+			const lineCount = editor.document.lineCount
+			const languageId = editor.document.languageId
+
+			let logFunction = "console.log"
+			if (languageId == "typescript") logFunction = "print"
+			if (languageId == "typescriptreact") logFunction = "$.Msg"
+
+			const positions: vscode.Position[] = []
+
+			for (let i = 0; i < lineCount; i++) {
+				const lineText = editor.document.lineAt(i)
+				const text = lineText.text
+
+				if (text.includes(logFunction)) {
+					const pos = text.indexOf(logFunction)
+					positions.push(new vscode.Position(i, pos))
+				}
+			}
+			// 坑,一次编辑操作要合并,循环必须写在回调里面
+			editor.edit(editBuilder => {
+				positions.forEach(v => {
+					editBuilder.insert(v, "//")
+				})
+			})
+		}
+	})
+	vscode.commands.registerCommand("fast-log-dota2.generator-unannotation", () => {
+		const editor = vscode.window.activeTextEditor
+		if (editor) {
+			const lineCount = editor.document.lineCount
+			const languageId = editor.document.languageId
+
+			let logFunction = "console.log"
+
+			if (languageId == "typescript") logFunction = "print"
+			if (languageId == "typescriptreact") logFunction = "$.Msg"
+
+			const ranges: vscode.Range[] = []
+
+			for (let i = 0; i < lineCount; i++) {
+				const lineText = editor.document.lineAt(i)
+				const text = lineText.text
+
+				if (text.includes(logFunction) && text.includes("//")) {
+					const pos = text.indexOf("//")
+					ranges.push(new vscode.Range(new vscode.Position(i, pos), new vscode.Position(i, pos + 2)))
+				}
+			}
+			editor.edit(editBuilder => {
+				ranges.forEach(v => {
+					editBuilder.delete(v)
+				})
+			})
 		}
 	})
 }
@@ -80,10 +132,7 @@ function enclosingBlockName(document: TextDocument, lineOfSelectedVar: number, b
 		switch (blockType) {
 			case "class":
 				if (doesContainClassDeclaration(currentLineText)) {
-					if (
-						lineOfSelectedVar > currentLineNum &&
-						lineOfSelectedVar < closingBracketLine(document, currentLineNum, BracketType.CURLY_BRACES)
-					) {
+					if (lineOfSelectedVar > currentLineNum && lineOfSelectedVar < closingBracketLine(document, currentLineNum, BracketType.CURLY_BRACES)) {
 						return `${getClassName(currentLineText)}`
 					}
 				}
@@ -91,10 +140,7 @@ function enclosingBlockName(document: TextDocument, lineOfSelectedVar: number, b
 
 			case "function":
 				if (doesContainsNamedFunctionDeclaration(currentLineText) && !doesContainsBuiltInFunction(currentLineText)) {
-					if (
-						lineOfSelectedVar >= currentLineNum &&
-						lineOfSelectedVar < closingBracketLine(document, currentLineNum, BracketType.CURLY_BRACES)
-					) {
+					if (lineOfSelectedVar >= currentLineNum && lineOfSelectedVar < closingBracketLine(document, currentLineNum, BracketType.CURLY_BRACES)) {
 						if (getFunctionName(currentLineText).length !== 0) {
 							return `${getFunctionName(currentLineText)}`
 						}
@@ -117,7 +163,7 @@ export function closingBracketLine(document: TextDocument, declarationLine: numb
 	let nbrOfOpenedBraces = 0
 	let nbrOfClosedBraces = 0
 	while (declarationLine < document.lineCount) {
-		const {openingBrackets, closingBrackets} = locBrackets(document.lineAt(declarationLine).text, bracketType)
+		const { openingBrackets, closingBrackets } = locBrackets(document.lineAt(declarationLine).text, bracketType)
 		nbrOfOpenedBraces += openingBrackets
 		nbrOfClosedBraces += closingBrackets
 		if (nbrOfOpenedBraces - nbrOfClosedBraces === 0) {
@@ -168,11 +214,7 @@ function doesContainsNamedFunctionDeclaration(loc: string): boolean {
 	const regularNamedFunctionRegex = new RegExp(/\s*[a-zA-Z0-9]+\s*\(.*\):?.*{/)
 	const regularFunctionAssignedToVariableRegex = new RegExp(/(const|let|var)(\s*)[a-zA-Z0-9]*\s*=(\s*)\(.*\)(\s*){/)
 	const arrowFunctionAssignedToVariableRegex = new RegExp(/(const|let|var)(\s*)[a-zA-Z0-9]*\s*=.*=>.*/)
-	return (
-		regularNamedFunctionRegex.test(locWithoutFunctionKeyword) ||
-		regularFunctionAssignedToVariableRegex.test(locWithoutFunctionKeyword) ||
-		arrowFunctionAssignedToVariableRegex.test(loc)
-	)
+	return regularNamedFunctionRegex.test(locWithoutFunctionKeyword) || regularFunctionAssignedToVariableRegex.test(locWithoutFunctionKeyword) || arrowFunctionAssignedToVariableRegex.test(loc)
 }
 function doesContainsBuiltInFunction(loc: string): boolean {
 	const locWithoutWhiteSpaces = loc.replace(/\s/g, "")

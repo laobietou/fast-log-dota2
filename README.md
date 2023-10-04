@@ -31,8 +31,12 @@ export function Test() {
 
 ---
 
-- Selecting the variable which is the subject of the debugging.
-- Pressing ctrl + shift + L
+-   Selecting the variable which is the subject of the debugging.
+-   Pressing ctrl + shift + L
 
-- 选中变量
-- 按 ctrl + shift + L
+-   选中变量 或 不选中内容
+-   ctrl + shift + L
+-   注释全部 log
+-   ctrl + shift + P 输入命令 Annotation Logs
+-   取消注释全部 log
+-   ctrl + shift + P 输入命令 Unannotation Logs

@@ -23,10 +23,10 @@ export function activate(context: vscode.ExtensionContext) {
 			const tab = trimmedLine.match(/^\t*/)?.[0] || ""
 
 			// 判断文件类型
-			let logMethod: string = ""
-			const fileType = editor.document.fileName.split(".").pop()
-			if (fileType == "ts") logMethod = "print"
-			else logMethod = "$.Msg"
+			let logFunction: string = ""
+			const languageId = editor.document.languageId
+			if (languageId == "typescript") logFunction = "print"
+			if (languageId == "typescriptreact") logFunction = "$.Msg"
 
 			// 判断在class内还是function内
 			const className = enclosingBlockName(editor.document, position.line, "class")
@@ -34,15 +34,15 @@ export function activate(context: vscode.ExtensionContext) {
 
 			if (functionName.length > 0) {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~${functionName}()  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~${functionName}()  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
 				})
 			} else if (className.length > 0) {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~class:${className}  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~class:${className}  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
 				})
 			} else {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logMethod}('~${text}:' + ${text != "" ? text : `"什么"`})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~${text}:' + ${text != "" ? text : `"什么"`})\n`)
 				})
 			}
 		}

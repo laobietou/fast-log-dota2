@@ -5,7 +5,13 @@
 For Dota2 custom addons makers.  
 Fast print variables, use print() in .ts files and use $.Msg() in .tsx files.
 
-Dota2 制图用的.在 ts 文件中用 print()生成 log,在 tsx 文件中用$.Msg().
+Dota2 制图用的.
+
+在 ts 文件中用 print()生成 log,在 tsx 文件中用$.Msg().
+
+注释全部 log
+
+取消注释全部 log
 
 ### Features
 

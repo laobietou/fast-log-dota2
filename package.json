@@ -1,8 +1,8 @@
 {
 	"name": "fast-log-dota2",
 	"displayName": "Fast Log Dota2",
-	"description": "auto-generate print() in .ts and $.Msg() in .tsx",
-	"version": "1.0.2",
+	"description": "fast generate print() in .ts and $.Msg() in .tsx",
+	"version": "1.0.3",
 	"publisher": "laobietou",
 	"engines": {
 		"vscode": "^1.82.0"
@@ -20,7 +20,7 @@
 		"commands": [
 			{
 				"command": "fast-log-dota2.generator-log",
-				"title": "Generator Log"
+				"title": "Generate Log"
 			},
 			{
 				"command": "fast-log-dota2.generator-annotation",

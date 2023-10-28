@@ -2,6 +2,7 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode"
 import { TextDocument } from "vscode"
+// todo:generator -> generate readme
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -34,15 +35,15 @@ export function activate(context: vscode.ExtensionContext) {
 
 			if (functionName.length > 0) {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~${functionName}()  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~${functionName}()  ~${text}:' + ${text != "" ? text : `"***"`})\n`)
 				})
 			} else if (className.length > 0) {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~class:${className}  ~${text}:' + ${text != "" ? text : `"什么"`})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~class:${className}  ~${text}:' + ${text != "" ? text : `"***"`})\n`)
 				})
 			} else {
 				editor.edit(editBuilder => {
-					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~${text}:' + ${text != "" ? text : `"什么"`})\n`)
+					editBuilder.insert(new vscode.Position(position.line + 1, 0), `${tab}${logFunction}('~${text}:' + ${text != "" ? text : `"***"`})\n`)
 				})
 			}
 		}
